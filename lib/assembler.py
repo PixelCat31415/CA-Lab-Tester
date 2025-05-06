@@ -236,5 +236,5 @@ if __name__ == '__main__':
 
     # check if input_file is actually a file
     source_asm = read_file(logger, args.input_file)
-    dest_bincode = assemble(args.input_file, args.target_file)
+    dest_bincode = assemble(source_asm)
     write_file(logger, args.target_file, dest_bincode)
