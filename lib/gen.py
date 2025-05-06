@@ -42,6 +42,8 @@ clear_directory(tests_dir)
 from testcases import testcase_groups
 from assembler import assemble
 from simulator import simulate
+tot_test = 0
+tot_generated = 0
 for group_name, testcases in testcase_groups:
     for testid, testcase in enumerate(testcases):
         test_name = f"{group_name}-{testid:02d}"
@@ -57,4 +59,7 @@ for group_name, testcases in testcase_groups:
         if testcase.expected is not None and not compare_last(testcase.output, testcase.expected):
             logger.error(f"Testcase {test_name}: simulation result does not match expected output")
         else:
-            logger.info(f"Testcase {test_name}: OK")
+            logger.info(f"Testcase {test_name}: generation OK")
+            tot_generated += 1
+        tot_test += 1
+logger.info(f"Successfully generated {tot_generated} out of {tot_test} testcases")
