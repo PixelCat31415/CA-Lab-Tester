@@ -1,4 +1,4 @@
-from util import get_logger, Instruction
+from util import get_logger, Instruction, read_file, write_file
 from cpu import Cpu
 import argparse
 import re
@@ -101,25 +101,10 @@ def parse_instructions(bincodes: list[tuple[str, Instruction]]) -> list[Instruct
     return insts
 
 
-def simulate(input_file: str, target_file: str) -> None:
-    # check if input_file is actually a file
-    logger.info(f"Simulating binary code from {input_file}")
-    logger.info(f"Writing simulation output to {target_file}")
-    if not os.path.isfile(input_file):
-        logger.error(f"Input file {input_file} is not a file")
-        raise ValueError()
-    
-    # read instructions as binary code from input_file
-    try:
-        with open(input_file) as f:
-            code = f.readlines()
-    except Exception as e:
-        logger.error(f"Failed to read from instruction file `{input_file}`")
-        raise e
-    
+def simulate(source_bincode: str) -> str:
     # decode binary code into instructions
     try:
-        code = parse_bincode(code)
+        code = parse_bincode(source_bincode.split("\n"))
         insts = parse_instructions(code)
     except Exception as e:
         logger.error(f"Failed to parse binary code")
@@ -150,61 +135,23 @@ def simulate(input_file: str, target_file: str) -> None:
     except Exception as e:
         logger.error("Failed to initialize CPU")
         raise e
-
-    # open the target file, where the simulation output will go, for writing
-    try:
-        writable_target = open(target_file, "w")
-    except Exception as e:
-        logger.error(f"Failed to open output file `{target_file}`")
-        raise e
-
+    
     # do simulation for 63 cycles, and dump the CPU state at the beginning of the 64-th cycle
     try:
+        output = ""
         for _ in range(63):
             cpu.run_cycle()
-        writable_target.write(cpu.dump_states())
-        writable_target.write(cpu.dump_registers())
-        writable_target.write(cpu.dump_data())
-        writable_target.write("\n\n")
+        output += cpu.dump_states()
+        output += cpu.dump_registers()
+        output += cpu.dump_data()
+        output += "\n\n"
     except Exception as e:
         logger.error(f"Failed to simulate CPU execution")
         raise e
-
-    # close the target file
-    try:
-        writable_target.close()
-    except Exception as e:
-        logger.error(f"Failed to close output file `{target_file}`")
-        raise e
+    return output
 
 
-def compare_output(target_file: str, expected_file: str):
-    # check if target_file and expected_file are actually files
-    logger.info(f"Comparing output file {target_file} against expected output {expected_file}")
-    if not os.path.isfile(target_file):
-        logger.error(f"{target_file} is not a file")
-        raise ValueError()
-    if not os.path.isfile(expected_file):
-        logger.error(f"{expected_file} is not a file")
-        raise ValueError()
-    
-    # read from both files
-    try:
-        with open(target_file) as f:
-            output = f.readlines()[-19:]
-    except Exception as e:
-        logger.error(f"Failed to read the last registers and data memory state from {target_file}")
-        raise e
-    try:
-        with open(expected_file) as f:
-            expected = f.readlines()[-19:]
-    except Exception as e:
-        logger.error(f"Failed to read the last registers and data memory state from {expected_file}")
-        raise e
-    
-    # compare
-    output = "".join(output)
-    expected = "".join(expected)
+def compare_output(output: str, expected: str):
     if output == expected:
         logger.info(f"Output matches the expected output")
     else:
@@ -224,7 +171,11 @@ if __name__ == '__main__':
     parser.add_argument('target_file', help="target file to hold output of CPU simulation")
     parser.add_argument('--expected_file', help="if provided, the target file will be compared against this file. only the content of registers and data memory will be compared; the program counter and cycle/stall/flush counts are not compared")
     args = parser.parse_args()
-    simulate(args.input_file, args.target_file)
+    
+    source_bincode = read_file(logger, args.input_file)
+    output = simulate(source_bincode)
+    write_file(logger, args.target_file, output)
     if args.expected_file is not None:
-        compare_output(args.target_file, args.expected_file)
+        expected = read_file(logger, args.expected_file)
+        compare_output(output, expected)
 

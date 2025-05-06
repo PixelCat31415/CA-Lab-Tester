@@ -22,6 +22,7 @@ INST_NOPS = Instruction(0, "nops", "nops", -1, "nops", 0, 0, 0, 0, None)
 # logging
 
 import logging
+import os
 
 class CustomFormatter(logging.Formatter):
 
@@ -60,6 +61,28 @@ def get_logger(module_name, debug = False):
     ch.setFormatter(CustomFormatter())
     logger.addHandler(ch)
     return logger
+
+def read_file(logger: logging.Logger, file_path: str) -> str:
+    logger.info(f"Reading from {file_path}")
+    if not os.path.isfile(file_path):
+        logger.error(f"Reading from file {file_path}, which is not a regular file")
+        raise ValueError()
+    try:
+        with open(file_path) as f:
+            cont = f.read()
+    except Exception as e:
+        logger.error(f"Failed to read from file {file_path}")
+        raise e
+    return cont
+
+def write_file(logger: logging.Logger, file_path: str, content: str) -> None:
+    logger.info(f"Writing binary code to {file_path}")
+    try:
+        with open(file_path, "w") as f:
+            f.write(content)
+    except Exception as e:
+        logger.error(f"Failed to write to instruction file `{file_path}`")
+        raise e
 
 
 # random

@@ -1,4 +1,4 @@
-from util import get_logger, Instruction
+from util import get_logger, Instruction, read_file, write_file
 import argparse
 import re
 import os.path
@@ -215,38 +215,15 @@ def assemble_all(insts: list[Instruction]) -> str:
     return result
 
 
-def assemble(input_file: str, target_file: str) -> None:
-    # check if input_file is actually a file
-    logger.info(f"Reading assembly code from {input_file}")
-    logger.info(f"Writing binary code to {target_file}")
-    if not os.path.isfile(input_file):
-        logger.error(f"Input file {input_file} is not a file")
-        raise ValueError()
-    
-    # read assembly source code from input_file
+def assemble(source_asm: str) -> None:
     try:
-        with open(input_file) as f:
-            code = f.readlines()
-    except Exception as e:
-        logger.error(f"Failed to read from source file `{input_file}`")
-        raise e
-    
-    # parse and assemble assembly code into binary code
-    try:
-        code = parse_lines(code)
+        code = parse_lines(source_asm.split("\n"))
         code = resolve_labels(code)
         code = assemble_all(code)
     except Exception as e:
         logger.error(f"Failed to assemble source code")
         raise e
-
-    # write assembled binary code to the target file
-    try:
-        with open(target_file, "w") as f:
-            f.write(code)
-    except Exception as e:
-        logger.error(f"Failed to write to instruction file `{target_file}`")
-        raise e
+    return code
 
 
 if __name__ == '__main__':
@@ -256,4 +233,8 @@ if __name__ == '__main__':
     parser.add_argument('input_file', help="source file with assembly code")
     parser.add_argument('target_file', help="target file to hold binary machine code")
     args = parser.parse_args()
-    assemble(args.input_file, args.target_file)
+
+    # check if input_file is actually a file
+    source_asm = read_file(logger, args.input_file)
+    dest_bincode = assemble(args.input_file, args.target_file)
+    write_file(logger, args.target_file, dest_bincode)
