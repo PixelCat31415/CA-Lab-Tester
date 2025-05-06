@@ -156,10 +156,10 @@ def compare_output(output: str, expected: str):
         logger.info(f"Output matches the expected output")
     else:
         logger.warning(f"Output does not match the expected output")
-        logger.warning(f"Output:")
-        print(output)
-        logger.warning(f"Expected:")
-        print(expected)
+        # logger.warning(f"Output:")
+        # print(output)
+        # logger.warning(f"Expected:")
+        # print(expected)
 
 
 if __name__ == '__main__':
@@ -171,11 +171,12 @@ if __name__ == '__main__':
     parser.add_argument('target_file', help="target file to hold output of CPU simulation")
     parser.add_argument('--expected_file', help="if provided, the target file will be compared against this file. only the content of registers and data memory will be compared; the program counter and cycle/stall/flush counts are not compared")
     args = parser.parse_args()
-    
+
     source_bincode = read_file(logger, args.input_file)
     output = simulate(source_bincode)
     write_file(logger, args.target_file, output)
     if args.expected_file is not None:
         expected = read_file(logger, args.expected_file)
         compare_output(output, expected)
+        logger.info(f"Expected {args.expected_file}, got {args.target_file}")
 
