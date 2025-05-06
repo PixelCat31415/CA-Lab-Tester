@@ -63,7 +63,7 @@ def get_logger(module_name, debug = False):
     return logger
 
 def read_file(logger: logging.Logger, file_path: str) -> str:
-    logger.info(f"Reading from {file_path}")
+    # logger.info(f"Reading from {file_path}")
     if not os.path.isfile(file_path):
         logger.error(f"Reading from file {file_path}, which is not a regular file")
         raise ValueError()
@@ -76,13 +76,22 @@ def read_file(logger: logging.Logger, file_path: str) -> str:
     return cont
 
 def write_file(logger: logging.Logger, file_path: str, content: str) -> None:
-    logger.info(f"Writing binary code to {file_path}")
+    # logger.info(f"Writing binary code to {file_path}")
     try:
         with open(file_path, "w") as f:
             f.write(content)
     except Exception as e:
         logger.error(f"Failed to write to instruction file `{file_path}`")
         raise e
+
+
+# compare last n lines of strings
+# returns True if identical
+
+def compare_last(src_1: str, src_2: str, line_count: int = 19) -> bool:
+    src_1 = "\n".join(src_1.split("\n")[-line_count:])
+    src_2 = "\n".join(src_2.split("\n")[-line_count:])
+    return src_1 == src_2
 
 
 # random
