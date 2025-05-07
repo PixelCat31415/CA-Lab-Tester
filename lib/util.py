@@ -60,7 +60,7 @@ def read_file(logger: logging.Logger, file_path: str) -> str:
     return cont
 
 def write_file(logger: logging.Logger, file_path: str, content: str) -> None:
-    logger.debug(f"Writing binary code to {file_path}")
+    logger.debug(f"Writing to {file_path}")
     try:
         with open(file_path, "w") as f:
             f.write(content)
