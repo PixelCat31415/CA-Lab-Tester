@@ -52,8 +52,11 @@ testcase_groups: list[tuple[str, list[Testcase]]] = [
         Testcase(asm=gen_srai()) for _ in range(5)
     ]),
     ("lab1", [
-        Testcase(asm=gen_random(i < 2)) for i in range(5
-    )]),
+        Testcase(asm=gen_random(i < 2)) for i in range(5)
+    ]),
+    ("bad_registers", [
+        from_asm("bad_registers.s")
+    ]),
 ]
 
 
