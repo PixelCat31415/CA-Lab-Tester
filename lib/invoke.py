@@ -75,10 +75,10 @@ for group in test_summary:
                     open(os.path.join(log_dir, f"{test_name}-vvp-stderr.txt"), "w") as vvp_stderr:
                 proc = subprocess.run(["vvp", cpu_program], stdout=vvp_stdout, stderr=vvp_stderr)
         except Exception as e:
-            logger.info(f"Test {test_name} - RE: vvp failed to execute CPU program")
+            logger.info(f"Test '{test_name}' - RE: vvp failed to execute CPU program")
             continue
         if proc.returncode != 0:
-            logger.info(f"Test {test_name} - RE: vvp finished with return code {proc.returncode}")
+            logger.info(f"Test '{test_name}' - RE: vvp finished with return code {proc.returncode}")
             continue
         shutil.copyfile(output_file, os.path.join(log_dir, f"{test_name}-output.txt"))
         shutil.copyfile(waveform_file, os.path.join(log_dir, f"{test_name}-waveform.txt"))
@@ -86,15 +86,15 @@ for group in test_summary:
             output = read_file(logger, output_file)
             expected = read_file(logger, test_output)
         except Exception as e:
-            logger.error(f"Test {test_name} - Judge Error: failed to read CPU output and simulation result")
+            logger.error(f"Test '{test_name}' - Judge Error: failed to read CPU output and simulation result")
             logger.error(f"what: {e}")
             continue
         if compare_last(output, expected):
-            logger.info(f"Test {test_name} - AC")
+            logger.info(f"Test '{test_name}' - AC")
             group_passed += 1
         else:
-            logger.info(f"Test {test_name} - WA: CPU output differs from simulation result")
-    logger.info(f"Group {group_name} - {group_passed} out of {len(test_names)} tests passed")
+            logger.info(f"Test '{test_name}' - WA: CPU output differs from simulation result")
+    logger.info(f"Group '{group_name}' - {group_passed} out of {len(test_names)} tests passed")
     tot_passed += group_passed
     tot_tests += len(test_names)
 logger.info(f"Total - {tot_passed} out of {tot_tests} tests passed ({tot_tests - tot_passed} failed)")
