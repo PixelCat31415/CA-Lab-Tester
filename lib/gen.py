@@ -6,7 +6,6 @@ from defs import *
 logger = get_logger("Generator")
 
 script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-gen_dir = os.path.join(script_dir, "gen")
 tests_dir = os.path.join(script_dir, "tests")
 
 parser = argparse.ArgumentParser(
@@ -15,7 +14,6 @@ parser = argparse.ArgumentParser(
 args = parser.parse_args()
 
 
-check_dir_exists(logger, gen_dir)
 check_dir_exists(logger, tests_dir)
 clear_directory(logger, tests_dir)
 
@@ -29,6 +27,7 @@ test_summary: list[dict] = []
 for group_name, testcases in testcase_groups:
     group_summary: list[str] = []
     for testid, testcase in enumerate(testcases):
+        tot_test += 1
         test_name = f"{group_name}-{testid:02d}"
         try:
             if testcase.bincode is None:
@@ -45,7 +44,6 @@ for group_name, testcases in testcase_groups:
             logger.info(f"Testcase {test_name}: generation OK")
             tot_generated += 1
             group_summary.append(test_name)
-        tot_test += 1
     test_summary.append({
         "name": group_name,
         "tests": group_summary
