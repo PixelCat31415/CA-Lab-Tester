@@ -141,10 +141,10 @@ def simulate(source_bincode: str) -> str:
         output = ""
         for _ in range(63):
             cpu.run_cycle()
-        output += cpu.dump_states()
-        output += cpu.dump_registers()
-        output += cpu.dump_data()
-        output += "\n\n"
+            output += cpu.dump_states()
+            output += cpu.dump_registers()
+            output += cpu.dump_data()
+            output += "\n\n"
     except Exception as e:
         logger.error(f"Failed to simulate CPU execution")
         raise e
