@@ -1,9 +1,5 @@
-# cp ../testcases/instruction_15.txt instruction.txt
-# iverilog -o ./cpu ../code/**/*.v
-# vvp ./cpu
-# python ../gen/simulator.py ./instruction.txt ./simulated.txt --expected_file ./output.txt
-
 from util import *
+from defs import *
 import argparse
 import json
 import subprocess

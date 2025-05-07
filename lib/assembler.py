@@ -1,7 +1,7 @@
-from util import get_logger, Instruction, read_file, write_file
+from util import *
+from defs import *
 import argparse
 import re
-import os.path
 
 
 logger = get_logger("Assembler")

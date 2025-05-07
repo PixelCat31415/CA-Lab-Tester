@@ -1,16 +1,8 @@
-from util import read_file, write_file, get_logger
-from dataclasses import dataclass
+from util import *
+from defs import *
 import os.path
 
 logger = get_logger("Testcases")
-
-
-@dataclass
-class Testcase:
-    asm: str | None = None
-    bincode: str | None = None
-    output: str | None = None
-    expected: str | None = None
 
 
 script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

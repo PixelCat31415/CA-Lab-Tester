@@ -1,6 +1,7 @@
 import random
 from typing import TypeVar
-from util import rand_until, get_logger, Instruction, INST_NOPS
+from util import *
+from defs import *
 
 logger = get_logger("CPU")
 

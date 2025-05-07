@@ -1,8 +1,7 @@
 import os
-import os.path
-import shutil
 import argparse
 from util import *
+from defs import *
 
 logger = get_logger("Generator")
 
