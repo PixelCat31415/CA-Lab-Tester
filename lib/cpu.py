@@ -201,17 +201,5 @@ class Cpu:
         self.registers[0] = 0
 
 
-    # generate random testcase
-
-    def rand_reg(self) -> int:
-        return rand_until(
-            lambda: self.rand_imm(5),
-            lambda reg: reg != 0
-        )
-
-    def rand_imm(self, width) -> int:
-        return random.randint(0, 2 ** width - 1)
-
-
 if __name__ == '__main__':
     raise RuntimeError("This module is not meant to be run as a script")
