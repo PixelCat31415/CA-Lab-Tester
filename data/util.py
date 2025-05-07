@@ -27,11 +27,15 @@ def from_bincode(file_name: str, expected: str | None = None) -> Testcase:
 
 import random
 
-def rand_imm(width) -> int:
+def rand_uimm(width) -> int:
     return random.randint(0, 2 ** width - 1)
+
+def rand_simm(width) -> int:
+    min_val = 2 ** (width - 1)
+    return random.randint(-min_val, min_val - 1)
 
 def rand_reg() -> int:
     return rand_until(
-        lambda: rand_imm(5),
+        lambda: rand_uimm(5),
         lambda reg: reg != 0
     )
