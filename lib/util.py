@@ -126,3 +126,9 @@ def rand_until(rand_func, check_func):
     while ret is None or not check_func(ret):
         ret = rand_func()
     return ret
+
+
+# prevent this module from being run as the main script
+
+if __name__ == '__main__':
+    raise RuntimeError("This module is not meant to be run as a script")

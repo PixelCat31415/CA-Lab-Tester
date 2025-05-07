@@ -68,3 +68,7 @@ testcase_groups: list[tuple[str, list[Testcase]]] = [
         gen_branch_hazard(i) for i in range(6)
     ]),
 ]
+
+
+if __name__ == '__main__':
+    raise RuntimeError("This module is not meant to be run as a script")

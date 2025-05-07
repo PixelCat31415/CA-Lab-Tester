@@ -210,3 +210,7 @@ class Cpu:
 
     def rand_imm(self, width) -> int:
         return random.randint(0, 2 ** width - 1)
+
+
+if __name__ == '__main__':
+    raise RuntimeError("This module is not meant to be run as a script")
