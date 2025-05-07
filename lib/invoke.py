@@ -81,7 +81,7 @@ for group in test_summary:
             logger.info(f"Test '{test_name}' - RE: vvp finished with return code {proc.returncode}")
             continue
         shutil.copyfile(output_file, os.path.join(log_dir, f"{test_name}-output.txt"))
-        shutil.copyfile(waveform_file, os.path.join(log_dir, f"{test_name}-waveform.txt"))
+        shutil.copyfile(waveform_file, os.path.join(log_dir, f"{test_name}-waveform.vcd"))
         try:
             output = read_file(logger, output_file)
             expected = read_file(logger, test_output)
