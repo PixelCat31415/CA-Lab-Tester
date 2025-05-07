@@ -6,12 +6,12 @@ logger = get_logger("Testcases")
 
 
 script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-gen_dir = os.path.join(script_dir, "gen")
+data_dir = os.path.join(script_dir, "data")
 
 def get_gen_file(file_name: str | None) -> str | None:
     if file_name is None:
         return None
-    return read_file(logger, os.path.join(gen_dir, file_name))
+    return read_file(logger, os.path.join(data_dir, file_name))
 
 def from_asm(file_name: str, expected: str | None = None) -> Testcase:
     return Testcase(asm=get_gen_file(file_name), expected=get_gen_file(expected))
@@ -20,33 +20,13 @@ def from_bincode(file_name: str, expected: str | None = None) -> Testcase:
     return Testcase(bincode=get_gen_file(file_name), expected=get_gen_file(expected))
 
 
-def gen_branch_hazard(nops_count: int) -> Testcase:
-    source_asm = ""
-    source_asm += '''
-    sw zero, 0(zero)
-    sw zero, 4(zero)
-    add t0, zero, zero  ; a fake x0 for nops
-    addi t1, zero, 42   ; payload
-    addi t2, zero, 0    ; tested value
+# import generator functions from data/
+# modifying sys.path because python imports are dumb
 
-    add t0, t0, t0  ; nops
-    add t0, t0, t0  ; nops
-    add t0, t0, t0  ; nops
-    add t0, t0, t0  ; nops
-    add t0, t0, t0  ; nops
+import sys
+sys.path.append(script_dir)
 
-    addi t2, zero, 8
-'''
-    source_asm += '''
-    add t0, t0, t0  ; nops''' * nops_count
-    source_asm += "\n"
-    source_asm += '''
-    beq t2, zero, BRANCH
-    sw t1, 0(zero)
-BRANCH:
-    sw t1, 4(zero)
-'''
-    return Testcase(asm=source_asm)
+from data.gen_branch_hazard import gen_branch_hazard
 
 
 testcase_groups: list[tuple[str, list[Testcase]]] = [
