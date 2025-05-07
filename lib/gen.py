@@ -11,7 +11,9 @@ tests_dir = os.path.join(script_dir, "tests")
 parser = argparse.ArgumentParser(
             prog='gen_testcase.py',
             description='Generate testcases')
+parser.add_argument('--groups', help="run tests on specific testcase groups, in format 'group1,group2,group3'")
 args = parser.parse_args()
+allowed_groups: list[str] = None if args.groups is None else args.groups.split(",")
 
 
 check_dir_exists(logger, tests_dir)
@@ -25,6 +27,8 @@ tot_test = 0
 tot_generated = 0
 test_summary: list[dict] = []
 for group_name, testcases in testcase_groups:
+    if allowed_groups is not None and group_name not in allowed_groups:
+        continue
     group_summary: list[str] = []
     for testid, testcase in enumerate(testcases):
         tot_test += 1

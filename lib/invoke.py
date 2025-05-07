@@ -11,8 +11,10 @@ parser = argparse.ArgumentParser(
             prog='invoke.py',
             description='Compile and run the CPU, and compare the output against simulated result')
 parser.add_argument('source_dir', help="directory containing source code of the CPU (typically lab2/code)")
+parser.add_argument('--groups', help="run tests on specific testcase groups, in format 'group1,group2,group3'")
 args = parser.parse_args()
-source_dir = os.path.abspath(args.source_dir)
+source_dir: str = os.path.abspath(args.source_dir)
+allowed_groups: list[str] = None if args.groups is None else args.groups.split(",")
 
 
 script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -61,6 +63,8 @@ tot_passed = 0
 for group in test_summary:
     group_name = group["name"]
     test_names = group["tests"]
+    if allowed_groups is not None and group_name not in allowed_groups:
+        continue
     group_passed = 0
     for test_name in test_names:
         test_inst = os.path.join(tests_dir, f"{test_name}.in")
