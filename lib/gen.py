@@ -37,6 +37,8 @@ for group_name, testcases in testcase_groups:
             if testcase.bincode is None:
                 testcase.bincode = assemble(testcase.asm)
             testcase.output = simulate(testcase.bincode)
+            if testcase.asm is not None:
+                write_file(logger, os.path.join(tests_dir, f"{test_name}.s"), testcase.asm)
             write_file(logger, os.path.join(tests_dir, f"{test_name}.in"), testcase.bincode)
             write_file(logger, os.path.join(tests_dir, f"{test_name}.out"), testcase.output)
         except Exception as e:
