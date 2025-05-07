@@ -37,6 +37,7 @@ for group_name, testcases in testcase_groups:
             write_file(logger, os.path.join(tests_dir, f"{test_name}.out"), testcase.output)
         except Exception as e:
             logger.error(f"Testcase {test_name}: assembler/simulator failed")
+            logger.error(f"what: {e}")
             continue
         if testcase.expected is not None and not compare_last(testcase.output, testcase.expected):
             logger.error(f"Testcase {test_name}: simulation result does not match expected output")
@@ -48,7 +49,7 @@ for group_name, testcases in testcase_groups:
         "name": group_name,
         "tests": group_summary
     })
-logger.info(f"Successfully generated {tot_generated} out of {tot_test} testcases")
+logger.info(f"Generated {tot_generated} out of {tot_test} testcases ({tot_test - tot_generated} failed)")
 
 
 import json
