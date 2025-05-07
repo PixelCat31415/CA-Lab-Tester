@@ -62,8 +62,13 @@ def get_logger(module_name, debug = False):
     logger.addHandler(ch)
     return logger
 
+
+# file operations
+
+import shutil
+
 def read_file(logger: logging.Logger, file_path: str) -> str:
-    # logger.info(f"Reading from {file_path}")
+    logger.debug(f"Reading from {file_path}")
     if not os.path.isfile(file_path):
         logger.error(f"Reading from file {file_path}, which is not a regular file")
         raise ValueError()
@@ -76,13 +81,33 @@ def read_file(logger: logging.Logger, file_path: str) -> str:
     return cont
 
 def write_file(logger: logging.Logger, file_path: str, content: str) -> None:
-    # logger.info(f"Writing binary code to {file_path}")
+    logger.debug(f"Writing binary code to {file_path}")
     try:
         with open(file_path, "w") as f:
             f.write(content)
     except Exception as e:
         logger.error(f"Failed to write to instruction file `{file_path}`")
         raise e
+
+def check_dir_exists(logger: logging.Logger, dir_path: str):
+    if not os.path.exists(dir_path):
+        logger.warning(f"directory {dir_path} does not exist; creating one")
+        os.mkdir(dir_path)
+    if not os.path.isdir(dir_path):
+        logger.error(f"{dir_path} is not a directory")
+        raise ValueError()
+
+def clear_directory(logger: logging.Logger, dir_path: str):
+    for filename in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            logger.error(f"Failed to delete {file_path} when clearing {dir_path}")
+            raise e
 
 
 # compare last n lines of strings
