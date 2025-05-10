@@ -57,6 +57,10 @@ testcase_groups: list[tuple[str, list[Testcase]]] = [
     ("bad_registers", [
         from_asm("bad_registers.s")
     ]),
+    ("forwarding", [
+        from_asm("forwarding-rs1.s"),
+        from_asm("forwarding-rs2.s"),
+    ]),
 ]
 
 
