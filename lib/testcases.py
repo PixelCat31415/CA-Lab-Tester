@@ -24,35 +24,10 @@ testcase_groups: list[tuple[str, list[Testcase]]] = [
         from_bincode("instruction_3.txt", "output_3.txt"),
         from_bincode("instruction_4.txt", "output_4.txt"),
     ]),
-    ("branch_hazard", [
+    ("hazards", [
         gen_branch_hazard(i) for i in range(6)
-    ]),
-    ("instruction_addi", [
-        Testcase(asm=gen_addi()) for _ in range(5)
-    ]),
-    ("instruction_and", [
-        Testcase(asm=gen_rtype("i_and")) for _ in range(5)
-    ]),
-    ("instruction_xor", [
-        Testcase(asm=gen_rtype("i_xor")) for _ in range(5)
-    ]),
-    ("instruction_sll", [
-        Testcase(asm=gen_sll()) for _ in range(5)
-    ]),
-    ("instruction_add", [
-        Testcase(asm=gen_rtype("i_add")) for _ in range(5)
-    ]),
-    ("instruction_sub", [
-        Testcase(asm=gen_rtype("i_sub")) for _ in range(5)
-    ]),
-    ("instruction_mul", [
-        Testcase(asm=gen_rtype("i_mul")) for _ in range(5)
-    ]),
-    ("instruction_srai", [
-        Testcase(asm=gen_srai()) for _ in range(5)
-    ]),
-    ("lab1", [
-        Testcase(asm=gen_random(i < 2)) for i in range(5)
+    ] + [
+        from_asm("load-use.s"),
     ]),
     ("bad_registers", [
         from_asm("bad_registers.s")
@@ -60,6 +35,26 @@ testcase_groups: list[tuple[str, list[Testcase]]] = [
     ("forwarding", [
         from_asm("forwarding-rs1.s"),
         from_asm("forwarding-rs2.s"),
+    ]),
+    ("single_instructions", [
+        Testcase(asm=gen_addi()) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_rtype("i_and")) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_rtype("i_xor")) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_sll()) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_rtype("i_add")) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_rtype("i_sub")) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_rtype("i_mul")) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_srai()) for _ in range(5)
+    ]),
+    ("mixed_instructions", [
+        Testcase(asm=gen_random(i < 2)) for i in range(5)
     ]),
 ]
 
