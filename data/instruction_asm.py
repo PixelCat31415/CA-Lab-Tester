@@ -1,11 +1,7 @@
+# R-type
+
 def i_rtype(inst, rd, rs1, rs2):
     return f"{inst} x{rd}, x{rs1}, x{rs2}\n"
-
-def i_itype(inst, rd, rs1, imm):
-    return f"{inst} x{rd}, x{rs1}, {imm}\n"
-
-
-# R-type
 
 def i_and(rd, rs1, rs2):
     return i_rtype("and", rd, rs1, rs2)
@@ -28,11 +24,26 @@ def i_mul(rd, rs1, rs2):
 
 # I-type
 
+def i_itype(inst, rd, rs1, imm):
+    return f"{inst} x{rd}, x{rs1}, {imm}\n"
+
 def i_addi(rd, rs1, imm):
     return i_itype("addi", rd, rs1, imm)
 
 def i_srai(rd, rs1, imm):
     return i_itype("srai", rd, rs1, imm)
+
+
+# S-type
+
+def i_stype(inst, rd, rs1, offset):
+    return f"{inst} x{rd}, {offset}(x{rs1})\n"
+
+def i_lw(rd, rs1, offset):
+    return i_stype("lw", rd, rs1, offset)
+
+def i_sw(rs2, rs1, offset):
+    return i_stype("sw", rs2, rs1, offset)
 
 
 # pseudo instructions

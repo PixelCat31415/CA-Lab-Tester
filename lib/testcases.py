@@ -14,7 +14,8 @@ sys.path.append(script_dir)
 
 from data.util import *
 from data.gen_branch_hazard import gen_branch_hazard
-from data.gen_lab1 import *
+from data.gen_single_instructions import *
+from data.gen_mixed_instructions import *
 
 
 testcase_groups: list[tuple[str, list[Testcase]]] = [
@@ -52,9 +53,14 @@ testcase_groups: list[tuple[str, list[Testcase]]] = [
         Testcase(asm=gen_rtype("i_mul")) for _ in range(5)
     ] + [
         Testcase(asm=gen_srai()) for _ in range(5)
+    ] + [
+        Testcase(asm=gen_lw(0)),
+        Testcase(asm=gen_lw(32)),
+        Testcase(asm=gen_sw(0)),
+        Testcase(asm=gen_sw(32)),
     ]),
     ("mixed_instructions", [
-        Testcase(asm=gen_random(i < 2)) for i in range(5)
+        Testcase(asm=gen_mixed(i < 10)) for i in range(20)
     ]),
 ]
 
