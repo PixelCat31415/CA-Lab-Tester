@@ -10,7 +10,6 @@ def gen_branch_hazard(nops_count: int) -> Testcase:
     sw zero, 4(zero)
     add t0, zero, zero  ; a fake x0 for nops
     addi t1, zero, 42   ; payload
-    add t1, zero, zero  ; tested value
 '''
     source_asm += nops * 4
     source_asm += "    addi t2, zero, 8\n"
@@ -28,7 +27,6 @@ BRANCH1:
     sw zero, 12(zero)
     add t0, zero, zero  ; a fake x0 for nops
     addi t1, zero, 42   ; payload
-    add t1, zero, zero  ; tested value
 '''
     source_asm += nops * 4
     source_asm += "    addi t2, zero, 8\n"
