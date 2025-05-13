@@ -13,7 +13,7 @@ def gen_mixed(include_x0: bool = False):
         selected.append(reg)
         asm += i_addi(reg, 0, rand_simm(12))
     # run random instructions on selected registers
-    for _ in range(50):
+    for _ in range(25):
         inst_id = random.randint(1, 10)
         rs1 = random.choice(selected)
         rs2 = random.choice(selected)
